@@ -10,6 +10,7 @@ const Message = require("./models/Message");
 dotenv.config({ path: "../.env" });
 connectDB();
 
+// Must match the deployed SPA origin exactly (scheme + host, no trailing slash) for CORS and cookies.
 const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
 
 const app = express();

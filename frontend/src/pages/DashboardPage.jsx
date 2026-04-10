@@ -25,8 +25,8 @@ const DashboardPage = () => {
       </div>
       <GlassCard>
         <h3 className="mb-4 text-xl font-semibold">Weekly Financial Trend</h3>
-        <div className="h-72 w-full">
-          <ResponsiveContainer width="100%" height="100%">
+        <div className="h-72 min-h-[18rem] w-full min-w-0">
+          <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={260}>
             <AreaChart data={trend}>
               <XAxis dataKey="day" stroke="#d1fae5" />
               <YAxis stroke="#d1fae5" />

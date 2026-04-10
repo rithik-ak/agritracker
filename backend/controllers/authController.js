@@ -2,10 +2,13 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
+const isProd = process.env.NODE_ENV === "production";
+// Cross-origin SPA (e.g. Vercel + Render API) requires SameSite=None; Secure so the browser
+// sends the cookie with credentialed requests. "strict" blocks third-party/cross-site XHR.
 const COOKIE_OPTIONS = {
   httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
-  sameSite: "strict",
+  secure: isProd,
+  sameSite: isProd ? "none" : "lax",
   maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
 };
 
@@ -66,7 +69,11 @@ const login = async (req, res) => {
 };
 
 const logout = (req, res) => {
-  res.clearCookie("token", COOKIE_OPTIONS);
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: isProd,
+    sameSite: isProd ? "none" : "lax",
+  });
   return res.status(200).json({ message: "Logged out" });
 };
 
