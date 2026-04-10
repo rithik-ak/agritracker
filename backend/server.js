@@ -5,21 +5,19 @@ const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
 const { Server } = require("socket.io");
 const connectDB = require("./config/db");
+const { dynamicCors } = require("./config/cors");
 const Message = require("./models/Message");
 
 dotenv.config({ path: "../.env" });
 connectDB();
 
-// Must match the deployed SPA origin exactly (scheme + host, no trailing slash) for CORS and cookies.
-const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
-
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
-  cors: { origin: FRONTEND_URL, methods: ["GET", "POST"], credentials: true },
+  cors: { ...dynamicCors, methods: ["GET", "POST"] },
 });
 
-app.use(cors({ origin: FRONTEND_URL, credentials: true }));
+app.use(cors(dynamicCors));
 app.use(express.json());
 app.use(cookieParser());
 
